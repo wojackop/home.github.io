@@ -38,12 +38,8 @@ jobs:
     - name: Commit and Push changes
       uses: EndBug/add-and-commit@v9
       with:
-        # 添加所有更改的文件
         add: '.'
-        # 提交信息
-        message: '[CI] Auto-update Bing images.json'
-        # 不在推送前执行 git pull (因为我们已经用 fetch-depth: 0 获取了完整历史)
+        message: '[bot] update images.json'
         pull: 'false'
-      # 将您的 GH_TOKEN 作为 GITHUB_TOKEN 环境变量提供给这个 Action
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
