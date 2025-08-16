@@ -16,12 +16,9 @@ jobs:
     # checkout
     - name: checkout
       uses: actions/checkout@v2
-<<<<<<< HEAD
       with:
       persist-credentials: false  # 关键！禁用 checkout 提供的 GITHUB_TOKEN
       fetch-depth: 0              # 确保获取完整的提交历史
-=======
->>>>>>> 6652c9140920933ede68188a32fab229b05e0f05
     # setup nodejs
     - name: Use Node.js
       uses: actions/setup-node@v2
