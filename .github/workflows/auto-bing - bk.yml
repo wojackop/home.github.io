@@ -15,22 +15,13 @@ jobs:
     steps:
     # checkout
     - name: checkout
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false # 避免凭据冲突
-        fetch-depth: 0 # 确保有完整的提交历史
-
-    # setup nodejs and cache dependencies
+      uses: actions/checkout@v2
+    # setup nodejs
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v2
       with:
-        node-version: '20.x'
-        cache: 'npm' # 启用 npm 缓存
-
-    # Run the script to update images.json
-    - name: Update Bing images
-      run: node ./assets/js/bing.js
-
+        node-version: 20.x
+    - run: node ./assets/js/bing.js
     # commit
     - name: commit file
       run: |
