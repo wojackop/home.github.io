@@ -3,7 +3,7 @@ name: Auto Update Bing Images CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"  # 每天 UTC 时间凌晨1点运行
+    - cron: "0 1 * * *"
   push:
     branches: [ gh-pages ]
   pull_request:
@@ -13,33 +13,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # 1. 检出代码
-    - name: Checkout code
-      uses: actions/checkout@v4
+    # checkout
+    - name: checkout
+      uses: actions/checkout@v2
+    # setup nodejs
+    - name: Use Node.js
+      uses: actions/setup-node@v2
       with:
-        # 关键：禁用 checkout 提供的凭据，避免与后续步骤冲突
-        persist-credentials: false
-        # 获取完整的提交历史，确保 git diff 和 push 正常工作
-        fetch-depth: 0
-
-    # 2. 设置 Node.js 环境
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+        node-version: 20.x
+    - run: node ./assets/js/bing.js
+    # commit
+    - name: commit file
+      run: |
+        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --local user.name 'github-actions[bot]'
+        git diff --exit-code || git add . && git commit -am '[bot] update images.json' --allow-empty
+    # push 
+    - name: push changes
+      uses: ad-m/github-push-action@master
       with:
-        node-version: '20.x'
-
-    # 3. 运行您的 bing.js 脚本
-    # 这个脚本应该会修改 assets/json/images.json 文件
-    - name: Run bing.js script
-      run: node ./assets/js/bing.js
-
-    # 4. 提交并推送更改
-    # 使用 EndBug/add-and-commit，这是目前最推荐的方案
-    - name: Commit and Push changes
-      uses: EndBug/add-and-commit@v9
-      with:
-        add: '.'
-        message: '[bot] update images.json'
-        pull: 'false'
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        github_token: ${{ secrets.GH_TOKEN }}
